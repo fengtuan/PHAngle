@@ -9,6 +9,7 @@ Predicting the backbone torsion angles corresponding to each residue of a protei
 ### 1. Requirement
 > * Python >=3.11  
 > * PyTorch >=2.4.0
+> * Embedding features need to be placed in the folder “/embeddingData/”.
 
 
 The codes are tested under Ubuntu.
