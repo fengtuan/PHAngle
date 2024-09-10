@@ -1,8 +1,6 @@
  #!/usr/bin/env python3
 #10 n -*- coding: utf-8 -*-
 """ 
-Created on Fri Jul 16 16:47:39 2021
-
 @author: weiyang
 """
 from __future__ import print_function, division
@@ -130,33 +128,7 @@ class PHAngle(nn.Module):
         return out
 
 
-#do not using PHLinear and PHConv1D   
-class PHAngle_base(nn.Module):
-    def __init__(self,args):
-        super(PHAngle_base, self).__init__()       
-        self.proj = Linear(args.input_dim, args.hidden_size, 0)        
-        self.layer = nn.ModuleList(
-                [inception_unit(BasicConv1d,args.hidden_size,args.hidden_size,args.dropout,args.r) for i in range(args.depth)])        
-        self.bn = BatchNorm1d(args.hidden_size)
-        self.fc1 = Conv1d(args.hidden_size, 512, 1, args.r)             
-        if args.degree_transfer:            
-            self.fc2 =  nn.Conv1d(512, 4, 1, padding=0,bias=False)
-        else:                       
-            self.fc2 =  nn.Conv1d(512, 2, 1, padding=0,bias=False)
-        self.depth=args.depth
-        self.dropout=nn.Dropout(args.dropout)
-    def forward(self, x,masks=None):        
-        out = F.hardswish(self.proj(x))
-        out = self.dropout(out)         
-        out = out.transpose(1,2).contiguous()        
-        for i in range(self.depth):
-            out = self.layer[i](out,masks)         
-        out=self.bn(out,masks)
-        out=F.hardswish(self.fc1(out))              
-        out=self.fc2(out)
-        out=out.transpose(1,2).contiguous()        
-        out = F.hardtanh(out,-6,6)/6.0       
-        return out
+
 
 
 
